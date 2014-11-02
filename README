@@ -1,0 +1,9 @@
+WIKIDATA NO LABELS
+==================
+
+Queries WDQ, the Wikidata database and prints a selection of items
+without label in a specified language.
+
+Released under BSD license.
+
+Requires a connection to Wikidata replication database and PHP 5.3+.

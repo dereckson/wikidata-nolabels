@@ -7,3 +7,22 @@ without label in a specified language.
 Released under BSD license.
 
 Requires a connection to Wikidata replication database and PHP 5.3+.
+
+Credits
+-------
+Written by Sébastien Santoro aka Dereckson.
+
+This tool uses the following 3rd party components:
+
+    - Bootstrap, licensed under MIT.
+      http://getbootstrap.com/
+
+    - sorttable, licensed under X11 by Stuart Langridge.
+      http://www.kryogenix.org/code/browser/sorttable/
+
+Acknowledgment
+--------------
+
+Dedicated to Harmonia Amanda.
+
+Thank you too to Hsarrazin.

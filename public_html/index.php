@@ -20,6 +20,7 @@ $languagesToPrint = isset($_REQUEST['languagesToPrint']) ? $_REQUEST['languagesT
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
 	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<script src="/wikidata-nolabels/js/sorttable.js"></script>
 	<style>
 .navbar-logo img {
 	width: 32px;
@@ -36,10 +37,13 @@ table {
 	border-spacing: 10px;
 	border-collapse: separate;
 }
+
+table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sorttable_nosort):after {
+	content: " \25B4\25BE";
+}
 	</style>
 </head>
 <body>
-
 <nav class="navbar navbar-default" role="navigation">
   <!-- Brand and toggle get grouped for better mobile display -->
   <div class="navbar-header">
@@ -75,7 +79,7 @@ if (isset($_REQUEST['query'])) {
 		$noLabelsQuery = new WikidataNoLabelsQuery($query, $language, $languages);
 		$noLabelsQuery->run();
 
-		echo "<table>
+		echo "<table class=\"sortable\">
 <thead>
     <tr><th>Item</th>";
 		foreach ($languages as $labelLanguage) {

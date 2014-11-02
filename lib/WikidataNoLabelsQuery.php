@@ -102,7 +102,10 @@ class WikidataNoLabelsQuery {
 		$clauseIn = join(', ', $itemsHaystack);
 		$sql = "SELECT $what
 			FROM wb_terms
-		        WHERE term_type = 'label' AND term_language = '$language' AND term_entity_id IN ($clauseIn)";
+		        WHERE term_type = 'label' AND
+                              term_language = '$language' AND
+		              term_entity_type = 'item' AND
+		              term_entity_id IN ($clauseIn)";
 
 		$db = ReplicationDatabaseFactory::get('wikidatawiki');
 		$result = $db->query($sql);

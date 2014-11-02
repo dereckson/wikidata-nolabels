@@ -112,7 +112,7 @@ if (isset($_REQUEST['query'])) {
   </div>
   <div class="form-group">
     <label for="language">Without label in the following language</label>
-    <input id="language" name="language" value="fr" size="4" class="form-control" />
+    <input id="language" name="language" value="<?= $language ?>" size="4" class="form-control" />
   </div>
   <div class="form-group">
     <label for="languagesToPrint">Add columns to print labels in the following languages</label>

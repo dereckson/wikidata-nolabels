@@ -73,6 +73,7 @@ class WikidataNoLabelsQuery {
 		}
 
 		//Fills label in extra languages
+		if (count($items) == 0) return;
 		foreach ($this->labelsToFetchLanguages as $labelLanguage) {
 			$labelLanguageKey = 'label' . $labelLanguage;
 			$labels = $this->getItemsWithLabelIn($labelLanguage, $items, true);

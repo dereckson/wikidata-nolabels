@@ -6,6 +6,7 @@
  */
 
 $query = isset($_REQUEST['query']) ? $_REQUEST['query'] : '';
+$items = isset($_REQUEST['items']) ? trim($_REQUEST['items']) : '';
 $language = isset($_REQUEST['language']) ? $_REQUEST['language'] : 'fr';
 $languagesToPrint = isset($_REQUEST['languagesToPrint']) ? $_REQUEST['languagesToPrint'] : '';
 
@@ -17,31 +18,12 @@ $languagesToPrint = isset($_REQUEST['languagesToPrint']) ? $_REQUEST['languagesT
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Wikidata no labels | Tool Labs</title>
+	<script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="/wikidata-nolabels/style.css">
 	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 	<script src="/wikidata-nolabels/js/sorttable.js"></script>
-	<style>
-.navbar-logo img {
-	width: 32px;
-	padding-top: 9px !important;
-	padding-bottom: 0 !important;
-}
-
-.navbar-logo a {
-	padding-top: 0 !important;
-	padding-bottom: 0 !important;
-}
-
-table {
-	border-spacing: 10px;
-	border-collapse: separate;
-}
-
-table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sorttable_nosort):after {
-	content: " \25B4\25BE";
-}
-	</style>
 </head>
 <body>
 <nav class="navbar navbar-default" role="navigation">
@@ -70,13 +52,19 @@ table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sor
 </nav>
 <div id="main_content" class="container"><div class="row">
 <?php
-if (isset($_REQUEST['query'])) {
+if (isset($_REQUEST['query']) || isset($_REQUEST['items'])) {
 	echo "<h3>Your query</h3>\n";
 
 	require('../lib/WikidataNoLabelsQuery.php');
 	$languages = explode(" ", $languagesToPrint);
 	try {
-		$noLabelsQuery = new WikidataNoLabelsQuery($query, $language, $languages);
+		$noLabelsQuery = new WikidataNoLabelsQuery($language, $languages);
+		if ($query) {
+			$noLabelsQuery->fillItemsFromWDQ($query);
+		} else {
+			$itemsArray = explode("\n", $items);
+			$noLabelsQuery->fillItems($itemsArray);
+		}
 		$noLabelsQuery->run();
 
 		echo "<table class=\"sortable\">
@@ -105,11 +93,39 @@ if (isset($_REQUEST['query'])) {
 }
 ?>
 <h3>New query</h3>
-<form role="form" method="GET">
+<form role="form" method="POST">
+  <h4>I. Get Wikidata items</h4>
+  <div class="tabbable-panel">
+	<div class="tabbable-line">
+		<ul class="nav nav-tabs ">
+			<li class="active">
+				<a href="#tab_getitems_query" data-toggle="tab">
+				WDQ API search</a>
+			</li>
+			<li>
+			<a href="#tab_getitems_list" data-toggle="tab">
+				Items list</a>
+			</li>
+		</ul>
+		<div class="tab-content">
+			<div class="tab-pane active" id="tab_getitems_query">
   <div class="form-group">
-    <label for="query">Get wikidata items with this WDQ query</label>
+    <label for="query">Get Wikidata items with this WDQ query</label>
     <input id="query" name="query" value="<?= $query ?>" size="48" placeholder="A WDQ query, like claim[1080:81738]" class="form-control" />
   </div>
+			</div>
+			<div class="tab-pane" id="tab_getitems_list">
+  <div class="form-group">
+    <label for="items">Encode Wikidata items</label><br />
+    <textarea id="items" name="items" placeholder="Q..." class="form-control" rows="8"><?= $items ?></textarea>
+  </div>
+			</div>
+		</div>
+	</div>
+  </div>
+
+  <h4>II. Define labels</h4>
+  <div class="tabbable-panel">
   <div class="form-group">
     <label for="language">Without label in the following language</label>
     <input id="language" name="language" value="<?= $language ?>" size="4" class="form-control" />
@@ -118,6 +134,8 @@ if (isset($_REQUEST['query'])) {
     <label for="languagesToPrint">Add columns to print labels in the following languages</label>
     <input id="languagesToPrint" name="languagesToPrint" value="<?= $languagesToPrint ?>" class="form-control" placeholder="Pick one or several languages with space as separator." />
   </div>
+  </div>
+
   <div class="form-group">
     <button type="submit" class="btn btn-default">Submit</button>
   </div>

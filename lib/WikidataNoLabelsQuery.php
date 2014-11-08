@@ -13,11 +13,10 @@ class WikidataNoLabelsQuery {
 	public $results;
 
 	/**
-	 * Query
-	 * @var string
+	 * Items
+	 * @var array The list of Wikidata items to handle
 	 */
-	public $query;
-
+	public $items;
 
 	/**
 	 * Language
@@ -34,14 +33,70 @@ class WikidataNoLabelsQuery {
 	/**
 	 * Initializes a new instance of the WikidataNoLabelsQuery class
 	 *
-	 * @param string $query The WDQ query to run
 	 * @param string $language The language to select items without labels in
 	 * @param array $labelsToFetchLanguages The languages to print labels
 	 */
-	function __construct ($query, $language, $labelsToFetchLanguages) {
-		$this->query = $query;
+	function __construct ($language, $labelsToFetchLanguages) {
 		$this->language = $language;
 		$this->labelsToFetchLanguages = $labelsToFetchLanguages;
+	}
+
+	///
+	/// Fill items
+	///
+
+	/**
+	 * Fills items from a WDQ query
+	 *
+	 * @param string $query The WDQ query to run
+	 */
+	function fillItemsFromWDQ ($query) {
+		if (!self::isValidWDQ($query)) {
+			throw new Exception("WDQ isn't valid.");
+		}
+
+		$this->items = self::queryWDQ($query);
+	}
+
+	/**
+	 * Fill items
+	 *
+	 * @param array $items An array of the items to handle
+	 */
+	function fillItems ($items) {
+		$this->items = self::normalizeItems($items);
+	}
+
+	/**
+	 * Normalizes an item list, to allows Qxxxx or xxxx as format
+	 *
+	 * @param array $items The items to normalize
+	 * @return array The normalized items
+	 */
+	function normalizeItems ($items) {
+		$result = array();
+		foreach ($items as $item) {
+			$item = self::normalizeItem($item);
+			if (strlen($item) > 0) {
+				$result[] = $item;
+			}
+		}
+		return $result;
+	}
+
+	/**
+	 * Normalize an item (e.g. 'Q500' or ' Q500' becomes 500)
+	 *
+	 * @param string $item The item to normalize
+	 * @returnstring The item normalized
+	 */
+	function normalizeItem ($item) {
+		$item = trim($item);
+		if ($item[0] == 'Q') {
+			//Omits initial Q
+			return substr($item, 1);
+		}
+		return $item;
 	}
 
 	///
@@ -52,16 +107,13 @@ class WikidataNoLabelsQuery {
 	 * Runs the queries
 	 *
 	 * After this method has ben called, $this->results is populated.
+	 *
+	 * @todo Split this procedural function
 	 */
 	function run () {
-		if (!self::isValidWDQ($this->query)) {
-			throw new Exception("WDQ isn't valid.");
-		}
-
-		//Computes the difference between the items of the WDQ query and the items having a label in the target language
-		$items = self::queryWDQ($this->query);
-		$itemsInTargetLanguage = $this->getItemsWithLabelIn($this->language, $items);
-		$items = array_diff($items, $itemsInTargetLanguage);
+		//Computes the difference between the items and the items having a label in the target language
+		$itemsInTargetLanguage = $this->getItemsWithLabelIn($this->language, $this->items);
+		$items = array_diff($this->items, $itemsInTargetLanguage);
 
 		//Prepare a bare results array
 		foreach ($items as $item) {

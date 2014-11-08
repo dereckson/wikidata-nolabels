@@ -61,6 +61,8 @@ if (isset($_REQUEST['query']) || isset($_REQUEST['items'])) {
 		$noLabelsQuery = new WikidataNoLabelsQuery($language, $languages);
 		if ($query) {
 			$noLabelsQuery->fillItemsFromWDQ($query);
+		} elseif (WikidataNoLabelsQuery::isValidURL($items)) {
+			$noLabelsQuery->fillItemsFromURL($items);
 		} else {
 			$itemsArray = explode("\n", $items);
 			$noLabelsQuery->fillItems($itemsArray);

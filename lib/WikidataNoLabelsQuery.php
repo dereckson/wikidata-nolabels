@@ -1,5 +1,6 @@
 <?php
 require_once('ReplicationDatabase.php');
+define('USER_AGENT', 'WikidataNoLabels/0.1');
 
 class WikidataNoLabelsQuery {
 	///
@@ -39,6 +40,7 @@ class WikidataNoLabelsQuery {
 	function __construct ($language, $labelsToFetchLanguages) {
 		$this->language = $language;
 		$this->labelsToFetchLanguages = $labelsToFetchLanguages;
+		$this->results = array();
 	}
 
 	///
@@ -56,6 +58,21 @@ class WikidataNoLabelsQuery {
 		}
 
 		$this->items = self::queryWDQ($query);
+	}
+
+	/**
+	 * Fill items from URL
+	 *
+	 * @param string $url The URL of the document to fetch items from
+	 */
+	function fillItemsFromURL ($url) {
+		$context = stream_context_create(array(
+			'http' => array(
+				'user_agent' => USER_AGENT
+			)
+		));
+		$items = file($url, FILE_IGNORE_NEW_LINES, $context);
+		$this->fillItems($items);
 	}
 
 	/**
@@ -88,15 +105,38 @@ class WikidataNoLabelsQuery {
 	 * Normalize an item (e.g. 'Q500' or ' Q500' becomes 500)
 	 *
 	 * @param string $item The item to normalize
-	 * @returnstring The item normalized
+	 * @return string|null The item normalized, or null if the item is invalid
 	 */
 	function normalizeItem ($item) {
 		$item = trim($item);
+		if (!self::isValidItem($item)) {
+			return null;
+		}
 		if ($item[0] == 'Q') {
 			//Omits initial Q
 			return substr($item, 1);
 		}
 		return $item;
+	}
+
+	/**
+	 * Determines if an item is valid
+	 *
+	 * @param $item The item to check
+	 * @return bool true if the item is valid; otherwise, false.
+	 */
+	function isValidItem ($item) {
+		return preg_match('/^Q?[0-9]+$/', $item);
+	}
+
+	/**
+	 * Determines if an URL is valid
+	 *
+	 * @param string $url he URL to check
+	 * @return bool true if the item is valid; otherwise, false.
+	 */
+	function isValidURL ($url) {
+		return parse_url($url) !== false;
 	}
 
 	///
@@ -111,6 +151,8 @@ class WikidataNoLabelsQuery {
 	 * @todo Split this procedural function
 	 */
 	function run () {
+		if (count($this->items) == 0) return;
+
 		//Computes the difference between the items and the items having a label in the target language
 		$itemsInTargetLanguage = $this->getItemsWithLabelIn($this->language, $this->items);
 		$items = array_diff($this->items, $itemsInTargetLanguage);

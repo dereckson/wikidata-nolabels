@@ -1,4 +1,5 @@
 *.log
 *.cnf
+*.conf
 .*_history
 .gitconfig

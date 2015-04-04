@@ -4,3 +4,4 @@
 .*_history
 .gitconfig
 .viminfo
+service.manifest

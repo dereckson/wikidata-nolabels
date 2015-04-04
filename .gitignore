@@ -3,3 +3,4 @@
 *.conf
 .*_history
 .gitconfig
+.viminfo

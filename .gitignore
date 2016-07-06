@@ -5,3 +5,5 @@
 .gitconfig
 .viminfo
 service.manifest
+# Kubernetes
+.kube/

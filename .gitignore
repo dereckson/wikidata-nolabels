@@ -1,9 +1,12 @@
+# Toolserver and unix account
 *.log
+.*_history
+.ssh
+.gitconfig
 *.cnf
 *.conf
-.*_history
-.gitconfig
 .viminfo
 service.manifest
+
 # Kubernetes
 .kube/

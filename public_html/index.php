@@ -18,11 +18,11 @@ $languagesToPrint = isset($_REQUEST['languagesToPrint']) ? $_REQUEST['languagesT
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Wikidata no labels | Tool Labs</title>
-	<script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
-	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+	<script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/3.2.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/3.2.0/css/bootstrap-theme.min.css">
 	<link rel="stylesheet" href="/wikidata-nolabels/style.css">
-	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>
 	<script src="/wikidata-nolabels/js/sorttable.js"></script>
 </head>
 <body>

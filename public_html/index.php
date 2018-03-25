@@ -17,7 +17,7 @@ $languagesToPrint = isset($_REQUEST['languagesToPrint']) ? $_REQUEST['languagesT
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Wikidata no labels | Tool Labs</title>
+	<title>Wikidata no labels | Toolforge</title>
 	<script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/3.2.0/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/3.2.0/css/bootstrap-theme.min.css">
@@ -45,7 +45,7 @@ $languagesToPrint = isset($_REQUEST['languagesToPrint']) ? $_REQUEST['languagesT
       <li><a href="/wikidata-nolabels/help.html">Help</a></li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
-        <li class="navbar-logo"><a href="https://tools.wmflabs.org"><img title="Powered by Wikimedia Labs" src="//upload.wikimedia.org/wikipedia/commons/thumb/6/60/Wikimedia_labs_logo.svg/32px-Wikimedia_labs_logo.svg.png" /></a></li>
+        <li class="navbar-logo"><a href="https://tools.wmflabs.org"><img title="Powered by Wikimedia Cloud Services" src="img/Wikimedia_Cloud_Services_logo.png" /></a></li>
         <li class="navbar-logo"><a href="http://www.dereckson.be/"><img title="Developed by Dereckson" src="img/LoupDereckson-32.png" /></a></li>
     </ul>
   </div><!-- /.navbar-collapse -->
